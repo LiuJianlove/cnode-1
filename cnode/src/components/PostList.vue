@@ -1,5 +1,5 @@
 <template>
- <div class="PostList">
+<div class="PostList">
   <!--在数据未返回的时候，显示这个正在加载的gif-->
   <div class="loading" v-if="isLoading">
     <img src="../assets/loading.gif" >
@@ -58,47 +58,50 @@
 </template>
 
 <script>
-
-export default {
-  name: 'PostList',
-  data(){
-      return {
-          isloading:false
-      }
-  },
-  methods:{
-      getData(){
-          this.$http.get('http://mock.hunger-valley.com/cnode/api/v1/topics',{
-              params:{
-                  page:this.postpage,
-                  limit:20
-              }
-          })
-          .then(res=>{
-              this.isloading = false; //加载成功，去除动画
-              this.posts = res.data.data;
-          })
-          .cathch(function (err) {
-              //处理返回失败后的问题
-              console.log(err)
-              
-          })
+  import pagination from './Pagination'
+    export default {
+        name: "PostList",
+      data(){
+          return {
+            isLoading:false,
+            posts:[],//代表页面的列表数组
+            postpage:1
+          }
       },
-      renderList(value){
+      components:{
+        pagination
+      },
+      methods:{
+          getData(){
+            this.$http.get('https://cnodejs.org/api/v1/topics',{
+              params:{
+                page:this.postpage,
+                limit:20
+              }
+            })
+              .then(res=>{
+                this.isLoading = false; //加载成功，去除动画
+                this.posts = res.data.data;
+              })
+              .catch(function (err) {
+                //处理返回失败后的问题
+                console.log(err)
+              })
+          },
+        renderList(value){
           this.postpage = value;
           this.getData();
+        }
+      },
+      beforeMount(){
+        this.isLoading = true;//加载成功之前显示加载动画
+        this.getData();//在页面加载之前获取数据
       }
-  },
-  beforeMount(){
-      this.isloading = true; //加载成功之前显示加载动画
-      this.getData(); //在页面加载之前获取数据
-  }
-  
-}
+    }
 </script>
 
 <style scoped>
-.PostList{
+  .PostList{
     background-color: #e1e1e1;
   }
   .posts {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
-     <div class="main">
+    <div class="main">
       <router-view name="slidebar"></router-view>
       <router-view name="main"></router-view>
     </div>
@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Header from './components/Header'
-import PostList from './components/PostList'
+  import Header from './components/Header'
+  import PostList from './components/PostList'
 export default {
   name: 'App',
   components:{
